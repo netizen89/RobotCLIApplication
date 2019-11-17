@@ -1,14 +1,20 @@
+"""
+File Name  : distance.py
+Description: Find minimum distance robot needs to travel to get to starting position
+"""
+
 from sys import argv
 
-
-# function to return minimum distance
 def find_distance(optimised_str) :
+    """
+        function to return minimum distance
+    """
     distance = 0
     effective_distance = 0
     count_forwards = 0
     count_backwards = 0
     print(optimised_str)
-
+    # optimsing list
 
     for i in range(len(optimised_str)) :
         print("value of index", i)
@@ -59,8 +65,10 @@ def find_distance(optimised_str) :
 
     print("Minimum distance", distance)
 
-# function to optimise list to remove iterations
 def optimise_commands(reversed_str) :
+    """
+        function to optimise list to remove iterations
+    """
     #optimised_list= []
     for i in range(len(reversed_str) - 1) :
         print("index", i)
@@ -73,12 +81,15 @@ def optimise_commands(reversed_str) :
         #effectively at the same position or straight line
         if reversed_str[i][0 :1] == "L":
             if reversed_str[i+1][0 :1] == "R":
+                print("L/R pair-removing")
                 # removing from the list
                 reversed_str.remove(reversed_str[i])
+                print("optimised list after removing 1 element", reversed_str)
                 reversed_str.remove(reversed_str[i])
                 print("optimised list after removing",reversed_str)
         elif reversed_str[i][0 :1] == "R":
             if reversed_str[i+1][0 :1] == "L":
+                print("R/L pair-removing")
                 # removing from the list
                 reversed_str.remove(reversed_str[i])
                 reversed_str.remove(reversed_str[i])
@@ -91,8 +102,13 @@ def optimise_commands(reversed_str) :
 
     print("list after optimisation", reversed_str)
 
-# function to analyse answer
+    #testing
+    #return(reversed_str)
+
 def analyse_command(snippet) :
+    """
+        function to analyse answer
+    """
     # direction and step variables
     direction = []
     movement = []
@@ -119,13 +135,51 @@ def analyse_command(snippet) :
     # finding distance
     find_distance(snippet)
 
+    #testing
+    #return snippet
 
-# if __name__ == " __main__":
-commandString = argv[1]
-print(commandString)
-# gives a list of commands; to separate commas
-# list values can be replaced, unlike strings
-commandList = commandString.split(',')
-print(commandList)
-# function to get answer
-analyse_command(commandList)
+def validate_command(cmd):
+    """
+    Function to validate command string
+    :param cmd: Command string given by user
+    :return:
+    """
+
+    # gives a list of commands; to separate commas
+    # list values can be replaced, unlike strings
+    cmd_list = cmd.split(',')
+    print("command element", cmd_list)
+    for i in range(0, len(cmd_list)) :
+        if ((cmd_list[i][0 :1] == 'F' or cmd_list[i][0 :1] == 'R'or cmd_list[i][0 :1] =='B' or cmd_list[i][0 :1] =='L')) :
+            if ((cmd_list[i][0 :1] == 'L') or (cmd_list[i][0 :1] == 'R')):
+                if (cmd_list[i][1:2] != '1') :
+                    print("Command Format invalid! L and R can only have 1 succeeding them!")
+                    exit()
+        else:
+            print("Invalid command:can have L|R|F|B")
+            exit()
+    return 0
+
+ # function to get answer
+    analyse_command(cmd_list)
+
+
+
+def main( var ):
+    """
+        main function
+    """
+
+    commandString = var
+    print(commandString)
+    # function to validate commandString
+    validate_command(commandString)
+
+
+if __name__ == "__main__":
+    print(len(argv))
+    if len(argv) == 2:
+        main(argv[1])
+    else:
+        print("Command list missing!Try again")
+        exit()
