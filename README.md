@@ -29,7 +29,7 @@ Format :  CommandNumber
  Format : python PyFile InputString/File   
  * File "distance.py" is the the name of the python file
  * File "command.txt" is provided to give command string
- Example: python distance.py command.txt |python distance.py distance.py L1,F2,B2
+ * Example: python distance.py command.txt || python distance.py distance.py L1,F2,B2
   
  ## Testing
  Unit test cases for the CLI application are available in the file "test_distance.py".
