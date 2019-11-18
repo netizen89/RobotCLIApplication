@@ -11,19 +11,16 @@ def find_distance(optimised_str) :
         function to return minimum distance
     """
     distance = 0
-    effective_distance = 0
-    count_forwards = 0
-    count_backwards = 0
     print(optimised_str)
-    # optimsing list
+    # initialising position
+    x,y = 0,0
+    direction = 0 # Taking 0 to be north, 1 - south, 2 - east, 3 - west
 
     for i in range(len(optimised_str)) :
+
         print("value of index", i)
         print("first element", optimised_str[i])
-        print("Effective distance", effective_distance)
-        print("total distance", distance)
-        # print("second element",optimised_str[i + 1])
-        # get sum of b's and f's till a direction is found
+
 
         # change in direction would mean steps are added
         if (optimised_str[i][0 :1] != "L") and (optimised_str[i][0 :1] != "R") :
@@ -31,40 +28,38 @@ def find_distance(optimised_str) :
             # last element
 
             if (optimised_str[i][0 :1] == "B") :
-                print("backward count loop")
-                print("value of index", i)
-                print(optimised_str[i])
-                count_backwards = count_backwards + int(optimised_str[i][1 :2])
-                print("backward count", count_backwards)
+                x,y = get_location( direction, x, y, -int(optimised_str[i][1 :2]) )
 
             if (optimised_str[i][0 :1] == "F") :
-                print("forward count loop")
-                count_forwards = count_forwards + int(optimised_str[i][1 :2])
-
-            # determine which movement was greater and find effective distance(subtraction)
-            print("backward_Count, forward_count", count_backwards, count_forwards)
-            if (count_forwards >= count_backwards) :
-                effective_distance = count_forwards - count_backwards
-            else :
-                effective_distance = count_backwards - count_forwards
+                x,y = get_location( direction, x, y, int(optimised_str[i][1 :2]) )
 
 
         elif (optimised_str[i][0 :1] == "L") or (optimised_str[i][0 :1] == "R") :
             print("else loop:got some direction command")
-            distance = distance + effective_distance
-            print("Distance computed till first direction", distance)
 
-            # computations done till a direction;resetting movement counters
-            count_forwards = 0
-            count_backwards = 0
-            effective_distance = 0
-            print("distance in else", distance)
+            if (optimised_str[i][0 :1] == "L") :
+                direction -= 1 if direction > 0 else -3
+            else :
+                direction += 1 if direction < 3 else -3
+
             continue
-    distance = distance + effective_distance
+
+    distance = abs(x) + abs(y)
 
     return distance
 
-
+def get_location( direction, x, y, distance ):
+    """
+        function to calculate final position after movement
+    """
+    if ( direction == 0 ) :
+        return x, y + distance
+    if ( direction == 1 ) :
+        return x + distance , y
+    if ( direction == 2 ) :
+        return x, y - distance
+    if ( direction == 3 ) :
+        return x - distance , y
 
 def optimise_commands(reversed_str) :
     """
@@ -95,11 +90,6 @@ def optimise_commands(reversed_str) :
                 reversed_str.remove(reversed_str[i])
                 reversed_str.remove(reversed_str[i])
                 print("optimised list after removing", reversed_str)
-        # 4 l's and 4 r,s same position(TO DO)
-        # using groupby() + list comprehension removing consecutive duplicates
-        # res = [i[0] for i in groupby(test_list)]
-
-        # 3 l's,3 r's(TO DO)
 
     print("list after optimisation", reversed_str)
 
