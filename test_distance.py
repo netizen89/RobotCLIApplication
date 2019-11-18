@@ -12,30 +12,28 @@ class Test(unittest.TestCase) :
 
 class TestCliApp(unittest.TestCase) :
 
-    @unittest.skip("")
+    #@unittest.skip("")
     def test_0_main(self) :
         main("command.txt")
         self.assertRaises(FileNotFoundError)
 
-    @unittest.skip("")
+    #@unittest.skip("")
     def test_validate_command(self) :
-        result = validate_command("L2,F3")
-        self.assertEqual(result, 0)
+        result = validate_command("F3,R1,L1,B2,F2,R1,L1,B6")
+        #self.assertRaises(SystemExit)
+        self.assertEqual(result, ['F3', 'R1', 'L1', 'B2', 'F2', 'R1', 'L1', 'B6'])
 
-    @unittest.skip("")
     def test_reverse_commands(self) :
-        result = analyse_command(['R1', 'F2', 'F3'])
-        self.assertEqual(result, ['B3', 'B2', 'L1'])
+        result = reverse_command(['F3', 'R1', 'L1', 'B2', 'F2', 'R1', 'L1', 'B6'])
+        self.assertEqual(result, ['F6', 'R1', 'L1', 'B2', 'F2', 'R1', 'L1', 'B3'])
 
-    @unittest.skip("")
     def test_optimise_commands(self) :
-        result = optimise_commands(['F2'])
-        self.assertEqual(result, ['F2'])
+        result = optimise_commands(['F6', 'R1', 'L1', 'B2', 'F2', 'R1', 'L1', 'B3'])
+        self.assertEqual(result, ['F6', 'B2', 'F2', 'B3'])
 
-    @unittest.skip("")
     def test_find_distance(self) :
-        result = find_distance(['B2', 'B3', 'F6', 'B2'])
-        self.assertEqual(result, 2)
+        result = find_distance(['F6', 'B2', 'F2', 'B3'])
+        self.assertEqual(result, 3)
 
 
 if __name__ == '__main__' :

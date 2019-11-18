@@ -27,7 +27,7 @@ Format :  CommandNumber
  Input can be given as command line arguments or as a file.
  
  Format : PyFile InputString/File
- File "command.txt" gives command string
+ * File "command.txt" is provided to give command string
   
  ## Testing
  Unit test cases for the CLI application are available.

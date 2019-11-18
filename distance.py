@@ -4,111 +4,99 @@ Description: Find minimum distance robot needs to travel to get to starting posi
 """
 
 from sys import argv
+import logging
+
+# logging.basicConfig(level=logging.disable())
+logging.basicConfig(level=logging.INFO)
+
+
+def get_location(direction, x, y, distance) :
+    """
+        Function to calculate final position after movement
+        :param : Direction,position(x,y),distance
+        :return: position calculated by movement
+    """
+    if (direction == 0) :
+        return x, y + distance
+    if (direction == 1) :
+        return x + distance, y
+    if (direction == 2) :
+        return x, y - distance
+    if (direction == 3) :
+        return x - distance, y
 
 
 def find_distance(optimised_str) :
     """
-        function to return minimum distance
+        Function to return minimum distance to starting position
+        :param : optimised string
+        :return: minimum distance
     """
-    distance = 0
-    print(optimised_str)
+
+    logging.debug('optimised string is %s', optimised_str)
     # initialising position
-    x,y = 0,0
-    direction = 0 # Taking 0 to be north, 1 - south, 2 - east, 3 - west
-
+    x, y = 0, 0
+    direction = 0  # Taking 0 to be north, 1 - south, 2 - east, 3 - west
     for i in range(len(optimised_str)) :
-
-        print("value of index", i)
-        print("first element", optimised_str[i])
-
-
+        logging.debug('index is %s', i)
+        logging.debug('element is %s', optimised_str[i])
         # change in direction would mean steps are added
         if (optimised_str[i][0 :1] != "L") and (optimised_str[i][0 :1] != "R") :
-            print("if loop:got some movement command")
-            # last element
-
+            logging.debug('if loop:got some movement command')
             if (optimised_str[i][0 :1] == "B") :
-                x,y = get_location( direction, x, y, -int(optimised_str[i][1 :2]) )
-
+                x, y = get_location(direction, x, y, -int(optimised_str[i][1 :2]))
             if (optimised_str[i][0 :1] == "F") :
-                x,y = get_location( direction, x, y, int(optimised_str[i][1 :2]) )
-
-
+                x, y = get_location(direction, x, y, int(optimised_str[i][1 :2]))
         elif (optimised_str[i][0 :1] == "L") or (optimised_str[i][0 :1] == "R") :
-            print("else loop:got some direction command")
-
-            if (optimised_str[i][0 :1] == "L") :
+            logging.debug('else loop:got some direction command')
+            if optimised_str[i][0 :1] == "L" :
                 direction -= 1 if direction > 0 else -3
             else :
                 direction += 1 if direction < 3 else -3
-
             continue
-
     distance = abs(x) + abs(y)
-
     return distance
 
-def get_location( direction, x, y, distance ):
-    """
-        function to calculate final position after movement
-    """
-    if ( direction == 0 ) :
-        return x, y + distance
-    if ( direction == 1 ) :
-        return x + distance , y
-    if ( direction == 2 ) :
-        return x, y - distance
-    if ( direction == 3 ) :
-        return x - distance , y
+
 
 def optimise_commands(reversed_str) :
     """
-        function to optimise list to remove iterations
+        Function to optimise command string to get less iterations
+        :param : Reversed Command string
+        :return: optimised reversed string
     """
-    # optimised_list= []
+
     for i in range(len(reversed_str) - 1) :
-        print("index", i)
-        print("length of list", len(reversed_str))
+        logging.debug('length of list %s', len(reversed_str))
         # out of bound exception
         if i >= (len(reversed_str) - 1) :
             break;
-        print("first elemnt", reversed_str[i][0 :1])
-        print("second  elemnt", reversed_str[i + 1][0 :1])
+        logging.debug('first element %s', reversed_str[i][0 :1])
+        logging.debug('second element %s', reversed_str[i + 1][0 :1])
         # effectively at the same position or straight line
         if reversed_str[i][0 :1] == "L" :
             if reversed_str[i + 1][0 :1] == "R" :
-                print("L/R pair-removing")
+                logging.debug('L/R pair-removing')
                 # removing from the list
                 reversed_str.remove(reversed_str[i])
-                print("optimised list after removing 1 element", reversed_str)
                 reversed_str.remove(reversed_str[i])
-                print("optimised list after removing", reversed_str)
         elif reversed_str[i][0 :1] == "R" :
             if reversed_str[i + 1][0 :1] == "L" :
-                print("R/L pair-removing")
+                logging.debug('R/L pair-removing')
                 # removing from the list
                 reversed_str.remove(reversed_str[i])
                 reversed_str.remove(reversed_str[i])
-                print("optimised list after removing", reversed_str)
-
-    print("list after optimisation", reversed_str)
-
-    # testing
+    logging.debug('list after optimisation %s', reversed_str)
     return reversed_str
 
 
-
-def analyse_command(snippet) :
+def reverse_command(snippet) :
     """
-        function to analyse answer
+        Function to reverse command string
+        :param : Validated command string given by user
+        :return: reversed Command list
     """
-    # direction and step variables
-    direction = []
-    movement = []
-
-    print("list of commands", snippet)
-    print("length of list", len(snippet))
-
+    logging.debug('list of commands %s', snippet)
     # reversing directions to get to the solution
     for i in range(len(snippet)) :
         if snippet[i][0 :1] == "R" :
@@ -119,79 +107,66 @@ def analyse_command(snippet) :
             snippet[i] = "B" + snippet[i][1 :2]
         else :
             snippet[i] = "F" + snippet[i][1 :2]
-    print("reserved elements as per solution", snippet)
     # reversing list to get back to starting position
     snippet.reverse()
-
-     # testing
+    logging.debug('list after reversal %s', snippet)
     return snippet
 
 
 def validate_command(cmd) :
     """
-    Function to validate command string
-    :param cmd: Command string given by user
-    :return:
+        Function to validate command string
+        :param : Command string given by user
+        :return:Command list
     """
-
     # gives a list of commands; to separate commas
     # list values can be replaced, unlike strings
     cmd_list = cmd.split(',')
-    print("command element", cmd_list)
+    logging.debug('command element %s', cmd_list)
     for i in range(0, len(cmd_list)) :
         if ((cmd_list[i][0 :1] == 'F' or cmd_list[i][0 :1] == 'R' or cmd_list[i][0 :1] == 'B' or cmd_list[i][
                                                                                                  0 :1] == 'L')) :
             if ((cmd_list[i][0 :1] == 'L') or (cmd_list[i][0 :1] == 'R')) :
                 if (cmd_list[i][1 :2] != '1') :
-                    print("Command Format invalid! L and R can only have 1 succeeding them!")
+                    logging.error('Command Format invalid! L and R can only have 1 succeeding them!')
+                    # print("Command Format invalid! L and R can only have 1 succeeding them!")
                     exit()
         else :
-            print("Invalid command:can have L|R|F|B")
+            logging.error('Invalid command:can have L|R|F|B')
+            # print("Invalid command:can have L|R|F|B")
             exit()
-
     return cmd_list
-
-    # testing
-    # return 0
 
 
 def main(var) :
     """
         main function
     """
-
     command_string = var
-
     # read from a file
     if command_string == "command.txt" :
         try :
             with open("command.txt") as fileobj :
                 command_string = fileobj.read()
         except FileNotFoundError :
-            print("Cannot find file command.txt")
+            logging.error('Cannot find file command.txt')
             exit()
-
-
-    print(command_string)
+    logging.debug('Commmand String %s', command_string)
     # function to validate commandString
     cmd_list = validate_command(command_string)
-
-    # function to get answer
-    reversed_list = analyse_command(cmd_list)
-
+    # function to get reverse commands
+    reversed_list = reverse_command(cmd_list)
     # optimising list;removing opposite actions from the list
-    print("Calling optimise function with list as ", reversed_list)
     optimised_list = optimise_commands(reversed_list)
-
     # finding distance
     distance = find_distance(optimised_list)
-    print("MINIMUM DISTANCE TO GET BACK TO STARTING POINT", distance)
+    print('MINIMUM DISTANCE TO GET BACK TO STARTING POINT :', distance)
 
 
 if __name__ == "__main__" :
-    print(len(argv))
+    logging.debug('argument length %s', len(argv))
     if len(argv) == 2 :
         main(argv[1])
     else :
-        print("Command list missing!Try again")
+        logging.error('Command list missing!Try again')
         exit()
