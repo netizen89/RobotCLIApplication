@@ -18,15 +18,16 @@ Format :  CommandNumber
  The robot can only turn 90 degrees at a time while forward/backward steps could be any. For example 'L1' means 'turn left by 90 degrees once'.  'B2' would mean go backwards 2 units.
  
  ## Input 
- a string of comma-separated commands eg `F1,R1,B2,L1,B3`.
+ A string of comma-separated commands eg `F1,R1,B2,L1,B3`.
  
  ## Output
- the minimum amount of distance to get back to the starting point (`4` in this case).
+ The minimum amount of distance to get back to the starting point (`4` in this case).
  
  ## Usage
  Input can be given as command line arguments or as a file.
  
- Format : PyFile InputString
+ Format : PyFile InputString/File
+ File "command.txt" gives command string
   
  ## Testing
  Unit test cases for the CLI application are available.
